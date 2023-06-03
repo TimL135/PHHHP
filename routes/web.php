@@ -1,6 +1,9 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,6 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//auth routes
+// Auth::routes(['verify' => true]);
 
-Route::inertia('/', 'hhh.Show');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware();
+
+
+Route::inertia('/login', 'auth.Login')->name('login');
+Route::inertia('/register', 'auth.Register');
 // Route::view('/', 'welcome');

@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -51,7 +52,6 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
-
     public function register(Request $request)
     {
         $request->validate([
@@ -60,11 +60,8 @@ class RegisterController extends Controller
             'name' => 'required'
         ]);
 
-        $user = $this->create($request->all());
-        // $this->guard()->login($user);
-
-        return response()->json([
-            'success' => 'true'
-        ], 200);
+        event(new Registered($user = $this->create($request->all())));
+        auth()->login($user);
+        return redirect()->route('dashboard')->with('success', 'Your account has been created.');
     }
 }

@@ -1,7 +1,8 @@
 import * as vue from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { importPageComponent } from '@/import-page-component';
-import './bootstrap';
+import "bootstrap/dist/css/bootstrap.min.css"
+import 'bootstrap';
 
 const pages = import.meta.glob('../Pages/**/*.vue');
 createInertiaApp({

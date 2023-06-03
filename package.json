@@ -26,6 +26,7 @@
         "@inertiajs/inertia-vue3": "^0.6.0",
         "@inertiajs/progress": "^0.2.7",
         "@popperjs/core": "^2.10.2",
-        "@vueuse/core": "^9.1.0"
+        "@vueuse/core": "^9.1.0",
+        "custom-mbd-components": "github:MBD-Team/CustomMBDComponents"
     }
 }
