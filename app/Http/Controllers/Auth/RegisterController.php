@@ -62,6 +62,6 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->all())));
         auth()->login($user);
-        return redirect()->route('dashboard')->with('success', 'Your account has been created.');
+        return redirect('dashboard')->with('success', 'Your account has been created.');
     }
 }

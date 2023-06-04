@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Http\Request;
-use App\Models\User;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -41,11 +43,11 @@ class LoginController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'device_name' => 'required',
         ], ["email.required" => 'CREDENTIALS_INVALID', "email.email" => 'CREDENTIALS_INVALID', "password.required" => 'CREDENTIALS_INVALID']);
 
         $user = User::where('email', $request->email)->first();
         //return Hash::check($request->password, $user->password)?"true":"false";
+
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
@@ -53,13 +55,14 @@ class LoginController extends Controller
             ]);
         }
 
-        $tokenExists = $user->tokens()->where('name', $request->device_name)->first();
+        $tokenExists = $user->tokens()->where('name', $user->name)->first();
         if ($tokenExists) $tokenExists->delete();
+        $user->createToken($user->name)->plainTextToken;
 
-        return $user->createToken($request->device_name)->plainTextToken;
+        return redirect()->route('dashboard');
     }
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('guest')->except('logout');
+    // }
 }

@@ -16,11 +16,9 @@ use Illuminate\Support\Facades\Auth;
 */
 
 //auth routes
-// Auth::routes(['verify' => true]);
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware();
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
 Route::inertia('/login', 'auth.Login')->name('login');
 Route::inertia('/register', 'auth.Register');
-// Route::view('/', 'welcome');

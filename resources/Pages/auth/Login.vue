@@ -13,8 +13,8 @@ import * as API from "../../js/Api";
 import { PasswordInput, EmailInput, Button } from "custom-mbd-components";
 
 
-const email = ref("");
-const password = ref("");
+const email = ref("test@test.de");
+const password = ref("Test1234.");
 
 async function login() {
   try {

@@ -1,7 +1,7 @@
 <template>
   <h1 v-if="user">Moin, {{ user.name }}</h1>
 
-  <div v-if="tasksToday.length > 0" class="mt-4">
+  <!-- <div v-if="tasksToday.length > 0" class="mt-4">
     <h3 class="mb-2 ">
       Aufgaben für heute
     </h3>
@@ -20,7 +20,7 @@
         </Modal>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 <script setup lang="ts">
 import { ref, toRefs } from "vue";
@@ -34,14 +34,14 @@ const props = withDefaults(
 const { user } = toRefs(props);
 const tasksToday = ref<type.Group[]>([])
 
-tasksToday.value = user.value.groups.map(group => ({
-  ...group, tasks:
-    Object.entries(group.tasks)
-      .filter(e => new Date(e[1].appointment || e[1].createAt).toLocaleDateString() == new Date().toLocaleDateString())
-      .filter(e => e[1].worker == user.value.id || e[1].worker == null)
-      .filter(e => e[1].done == false)
-      .reduce((a, b) => ({ ...a, [b[0]]: b[1] }), {})
-}))
+// tasksToday.value = user.value.groups.map(group => ({
+//   ...group, tasks:
+//     Object.entries(group.tasks)
+//       .filter(e => new Date(e[1].appointment || e[1].createAt).toLocaleDateString() == new Date().toLocaleDateString())
+//       .filter(e => e[1].worker == user.value.id || e[1].worker == null)
+//       .filter(e => e[1].done == false)
+//       .reduce((a, b) => ({ ...a, [b[0]]: b[1] }), {})
+// }))
 
 
 </script>
