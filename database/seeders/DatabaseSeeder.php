@@ -20,5 +20,16 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@admin.com',
             "password" => Hash::make("admin"),
         ]);
+        \App\Models\Group::factory()->create([
+            'name' => 'Test Group',
+            'owner_id' => 1,
+            'is_public' => true,
+        ]);
+        // \App\Models\Task::factory()->create([
+        // ]);
+        \App\Models\GroupUser::factory()->create([
+            'user_id' => 1,
+            'group_id' => 1,
+        ]);
     }
 }

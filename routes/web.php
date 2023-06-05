@@ -24,6 +24,7 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
         "user" => Auth::user(),
+        "groups" => Auth::user()->groups,
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

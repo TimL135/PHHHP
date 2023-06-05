@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 defineProps<{
-    user: any;
+    groups: any[];
 }>();
+const user = usePage().props.auth.user;
 </script>
 
 <template>
@@ -23,5 +24,6 @@ defineProps<{
                 </div>
             </div>
         </div>
+        {{ groups }}
     </AuthenticatedLayout>
 </template>
