@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedInteger("repeat");
             $table->string("title");
             $table->foreignId('worker_id')->nullable()->constrained(table: 'users');
+            $table->foreignId('group_id')->constrained();
             $table->timestamps();
         });
     }

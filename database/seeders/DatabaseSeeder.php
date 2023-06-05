@@ -25,8 +25,11 @@ class DatabaseSeeder extends Seeder
             'owner_id' => 1,
             'is_public' => true,
         ]);
-        // \App\Models\Task::factory()->create([
-        // ]);
+        \App\Models\Task::factory()->create([
+            "title" => "Test Task",
+            "notes" => "Test Notes",
+
+        ]);
         \App\Models\GroupUser::factory()->create([
             'user_id' => 1,
             'group_id' => 1,

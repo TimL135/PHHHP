@@ -24,6 +24,7 @@ class Task extends Model
         'repeat',
         'title',
         'worker_id',
+        'group_id'
     ];
 
     /**
@@ -33,9 +34,9 @@ class Task extends Model
      */
     protected $hidden = [];
 
-    public function groups()
+    public function group()
     {
-        return $this->belongsToMany(Group::class);
+        return $this->hasOne(Group::class);
     }
     public function worker()
     {

@@ -1,10 +1,29 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, usePage } from "@inertiajs/vue3";
-defineProps<{
-    groups: any[];
-}>();
-const user = usePage().props.auth.user;
+import { ref } from "vue";
+import * as type from "../types/type";
+import showTask from "../Components/HHH/showTask.vue";
+import { Modal } from 'custom-mbd-components';
+
+
+const user = ref(usePage().props.auth.user);
+const groups = ref(usePage().props.groups as type.Group[]);
+const tasksToday = ref<type.Group[]>(
+    groups.value.map((group) => ({
+        ...group,
+        tasks: Object.entries(group.tasks)
+            .filter(
+                (e) =>
+                    new Date(
+                        e[1].appointment || e[1].createAt
+                    ).toLocaleDateString() == new Date().toLocaleDateString()
+            )
+            .filter((e) => e[1].worker_id == user.value.id || e[1].worker_id == null)
+            .filter((e) => e[1].done == false)
+            .reduce((a, b) => ({ ...a, [b[0]]: b[1] }), {}),
+    }))
+);
 </script>
 
 <template>
@@ -16,14 +35,39 @@ const user = usePage().props.auth.user;
                 Dashboard
             </h2>
         </template>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">You're logged in!</div>
-                </div>
+<div class="d-flex flex-column align-items-center">
+    <h1 v-if="user">Moin, {{ user.name }}</h1>
+    <div v-if="tasksToday.length > 0" class="mt-4">
+        <h3 class="mb-2">Aufgaben für heute</h3>
+        <div v-for="e of tasksToday">
+            <h4 class="mb-2">{{ e.name }}</h4>
+            <div v-for="task of Object.entries(e.tasks)">
+                <Modal :title="task[1].title">
+                    <showTask
+                        dashboard
+                        :task="task[1]"
+                        :group="e"
+                        :groupUser="e.users"
+                        :user="user"
+                        :task-id="+task[0]"
+                    >
+                    </showTask>
+                    <template #button>
+                        <div class="m-1">
+                            <Button class="btn btn-primary w-100"
+                                >{{ task[1].title }} ({{
+                                    new Date(
+                                        task[1].appointment ||
+                                            task[1].createAt
+                                    ).toLocaleDateString()
+                                }})</Button
+                            >
+                        </div>
+                    </template>
+                </Modal>
             </div>
         </div>
-        {{ groups }}
+    </div>
+</div>
     </AuthenticatedLayout>
 </template>

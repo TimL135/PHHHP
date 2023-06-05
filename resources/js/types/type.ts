@@ -1,0 +1,42 @@
+export type Id = number;
+export type ShoppingKey = string;
+export type ShoppingAmount = string;
+export type Errors = { [key: string]: any };
+export interface Group {
+  id: Id;
+  name: string;
+  users: User[];
+  tasks: Tasks;
+  isPublic: boolean;
+  shoppingList: ShoppingList;
+}
+export interface ShoppingItem {
+  amount: ShoppingAmount
+  done: boolean
+  description: string
+  creator: Id
+}
+export interface ShoppingList {
+  shoppingItems: { [key: ShoppingKey]: ShoppingItem };
+  allShoppingItems: ShoppingKey[];
+}
+
+export type Tasks = { [key: Id]: Task };
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  email_verified_at: string;
+}
+
+export interface Task {
+  title: string;
+  notes: string;
+  done: boolean;
+  creator_id: Id;
+  worker_id?: Id;
+  appointment: string;
+  createAt: string;
+  doneAt?: string;
+  repeat: 0 | 1 | 7 | 14 | 31;
+}
