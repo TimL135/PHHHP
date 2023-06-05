@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean("isPublic");
+            $table->foreignId('owner_id')->constrained(table: 'users');
+            $table->boolean("is_public");
             $table->timestamps();
         });
     }

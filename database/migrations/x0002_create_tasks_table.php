@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->date("appointment");
-            $table->unsignedInteger("creator");
+            $table->foreignId('creator_id')->constrained(table: 'users');
             $table->boolean("done");
             $table->string("notes");
             $table->unsignedInteger("repeat");
             $table->string("title");
-            $table->unsignedInteger("worker");
+            $table->foreignId('worker_id')->nullable()->constrained(table: 'users');
             $table->timestamps();
         });
     }

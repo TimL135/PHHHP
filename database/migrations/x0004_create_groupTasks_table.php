@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('groupTasks', function (Blueprint $table) {
+        Schema::create('group_task', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('task');
-            $table->unsignedInteger("group");
+            $table->foreignId('task_id')->constrained();
+            $table->foreignId('group_id')->constrained();
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('groupTasks');
+        Schema::dropIfExists('group_task');
     }
 };
