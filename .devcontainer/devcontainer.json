@@ -20,12 +20,14 @@
 	"postCreateCommand": "composer install && npm install && cp .env.example .env && php artisan key:generate && php artisan migrate --seed ",
 	// Configure tool-specific properties.
 	"customizations": {
-		"extensions": [
+		"vscode": {
+				"extensions": [
 			"Vue.volar",
 			"esbenp.prettier-vscode",
 			"yoavbls.pretty-ts-errors",
 			"GitHub.copilot"
 		]
+		}
 	},
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	"remoteUser": "root"
