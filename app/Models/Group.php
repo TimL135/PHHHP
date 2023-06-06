@@ -20,17 +20,17 @@ class Group extends Model
         'name',
         'is_public',
     ];
-    protected $appends = ['tasks', "users"];
+    protected $appends = [];
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
-    protected $hidden = [];
+    protected $hidden = ["pivot"];
 
     public function getTasksAttribute()
     {
-        return Task::where('group_id', $this->id)->get();
+        return $this->tasks()->get();
     }
     public function getUsersAttribute()
     {
@@ -42,7 +42,7 @@ class Group extends Model
     }
     public function tasks()
     {
-        return $this->belongsToMany(Task::class);
+        return $this->hasMany(Task::class);
     }
     public function owner()
     {

@@ -24,9 +24,16 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
         "user" => Auth::user(),
-        "groups" => Auth::user()->groups,
+        "groups" => Auth::user()->groups->load("tasks")->load("users"),
     ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+Route::get('/groups', function () {
+    return Inertia::render('Dashboard', [
+        "user" => Auth::user(),
+        "groups" => Auth::user()->groups->load("tasks")->load("users"),
+    ]);
+})->middleware(['auth'])->name('groups');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

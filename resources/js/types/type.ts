@@ -5,10 +5,15 @@ export type Errors = { [key: string]: any };
 export interface Group {
   id: Id;
   name: string;
-  users: User[];
+  users: Id[];
   tasks: Tasks;
-  isPublic: boolean;
-  shoppingList: ShoppingList;
+  is_public: boolean
+}
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  email_verified_at: string;
 }
 export interface ShoppingItem {
   amount: ShoppingAmount
@@ -22,12 +27,6 @@ export interface ShoppingList {
 }
 
 export type Tasks = { [key: Id]: Task };
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  email_verified_at: string;
-}
 
 export interface Task {
   title: string;
@@ -36,7 +35,7 @@ export interface Task {
   creator_id: Id;
   worker_id?: Id;
   appointment: string;
-  createAt: string;
+  create_at?: string;
   doneAt?: string;
   repeat: 0 | 1 | 7 | 14 | 31;
 }
