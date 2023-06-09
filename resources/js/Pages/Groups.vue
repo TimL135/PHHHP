@@ -1,57 +1,59 @@
 <template>
-    <div v-if="groups.length == 0">
-        <h4>Du hast noch keine Gruppe</h4>
-        <div>
-            <Button class="me-2 btn btn-primary" @click="view = 'search'"
-                >Gruppe Suche</Button
+    <Head title="Dashboard" />
+
+    <AuthenticatedLayout>
+        <div v-if="groups.length == 0">
+            <h4>Du hast noch keine Gruppe</h4>
+            <div>
+                <Button class="me-2 btn btn-primary" @click="view = 'search'"
+                    >Gruppe Suche</Button
+                >
+                <Button class="btn btn-primary" @click="view = 'create'"
+                    >Gruppe erstellen</Button
+                >
+            </div>
+            <div>
+                <createGroup
+                    v-if="view == 'create'"
+                    v-model="view"
+                    :user="user"
+                ></createGroup>
+                <searchGroup :user="user" v-if="view == 'search'"></searchGroup>
+            </div>
+        </div>
+        <div v-else>
+            <h4
+                v-for="e of groups"
+                :class="
+                    group?.name == e.name
+                        ? 'text-decoration-underline text-primary'
+                        : ''
+                "
+                @click="group = e"
             >
-            <Button class="btn btn-primary" @click="view = 'create'"
-                >Gruppe erstellen</Button
-            >
+                {{ e.name }}
+            </h4>
+            <showGroup :group="group" :user="user"></showGroup>
+            <div class="mt-2">
+                <h3>weitere Gruppe finden</h3>
+                <searchGroup :user="user"></searchGroup>
+            </div>
+            <div class="mt-2">
+                <h3>neue Gruppe erstellen</h3>
+                <createGroup :user="user" v-model="view"></createGroup>
+            </div>
         </div>
-        <div>
-            <createGroup
-                v-if="view == 'create'"
-                v-model="view"
-                :user="user"
-            ></createGroup>
-            <searchGroup :user="user" v-if="view == 'search'"></searchGroup>
-        </div>
-    </div>
-    <div v-else>
-        <h4
-            v-for="e of groups"
-            :class="
-                group?.name == e.name
-                    ? 'text-decoration-underline text-primary'
-                    : ''
-            "
-        >
-            {{ e.name }}
-        </h4>
-        <showGroup
-            :group="group"
-            :groupUser="group.users"
-            :user="user"
-        ></showGroup>
-        <div class="mt-2">
-            <h3>weitere Gruppe finden</h3>
-            <searchGroup :user="user"></searchGroup>
-        </div>
-        <div class="mt-2">
-            <h3>neue Gruppe erstellen</h3>
-            <createGroup :user="user" v-model="view"></createGroup>
-        </div>
-    </div>
+    </AuthenticatedLayout>
 </template>
 <script setup lang="ts">
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
 import { ref, toRefs } from "vue";
 import * as type from "../types/type";
 import createGroup from "../Components/HHH/createGroup.vue";
 import showGroup from "../Components/HHH/showGroup.vue";
 import searchGroup from "../Components/HHH/searchGroup.vue";
 import { Button } from "custom-mbd-components";
-import { getGroupUsers } from "../api";
 
 const props = withDefaults(
     defineProps<{ user: type.User; groups: type.Group[] }>(),

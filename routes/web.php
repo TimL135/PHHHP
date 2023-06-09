@@ -29,7 +29,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/groups', function () {
-    return Inertia::render('Dashboard', [
+    return Inertia::render('Groups', [
         "user" => Auth::user(),
         "groups" => Auth::user()->groups->load("tasks")->load("users"),
     ]);
@@ -39,6 +39,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post("/addTask", [GroupController::class, "addTask"]);
 });
-
 require __DIR__ . '/auth.php';

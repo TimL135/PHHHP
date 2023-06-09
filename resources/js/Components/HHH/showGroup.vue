@@ -1,12 +1,8 @@
 <template>
     <div v-if="group">
-        <Accordion
-            :items="accordionItems"
-            v-if="groupUser.length"
-            style="width: 90vw"
-        >
+        <Accordion :items="accordionItems" v-if="group.users?.length">
             <template #users>
-                <div v-for="user of groupUser">
+                <div v-for="user of group.users">
                     {{ user.name }}
                 </div>
             </template>
@@ -14,7 +10,7 @@
                 <Modal title="Aufgabe hinzufügen" v-model="addModal">
                     <createTask
                         :group="group"
-                        :groupUser="groupUser"
+                        :groupUser="group.users"
                         :user="user"
                         v-model="addModal"
                     ></createTask>
@@ -37,8 +33,8 @@
                             .filter((e) => e[1].done == done)
                             .sort(
                                 (a, b) =>
-                                    +(a[1].appointment || a[1].create_at||"") -
-                                    +(b[1].appointment || b[1].create_at||"")
+                                    +(a[1].appointment || a[1].create_at || 0) -
+                                    +(b[1].appointment || b[1].create_at || 0)
                             )"
                         class="mb-1"
                     >
@@ -46,7 +42,7 @@
                             <showTask
                                 :task="task[1]"
                                 :group="group"
-                                :groupUser="groupUser"
+                                :groupUser="group.users"
                                 :user="user"
                                 :task-id="+task[0]"
                                 v-model="showModal"
@@ -57,7 +53,8 @@
                                         >{{ task[1].title }} ({{
                                             new Date(
                                                 task[1].appointment ||
-                                                    task[1].create_at||""
+                                                    task[1].create_at ||
+                                                    ""
                                             ).toLocaleDateString()
                                         }})</Button
                                     >
@@ -76,8 +73,8 @@
                             .filter((e) => e[1].worker_id || e[1].done == true)
                             .sort(
                                 (a, b) =>
-                                    +(a[1].appointment || a[1].create_at||"") -
-                                    +(b[1].appointment || b[1].create_at||"")
+                                    +(a[1].appointment || a[1].create_at || 0) -
+                                    +(b[1].appointment || b[1].create_at || 0)
                             )"
                         class="mb-1"
                     >
@@ -85,7 +82,7 @@
                             <showTask
                                 :task="task[1]"
                                 :group="group"
-                                :groupUser="groupUser"
+                                :groupUser="group.users"
                                 :user="user"
                                 :task-id="+task[0]"
                                 v-model="showModal"
@@ -96,7 +93,8 @@
                                         >{{ task[1].title }} ({{
                                             new Date(
                                                 task[1].appointment ||
-                                                    task[1].create_at||""
+                                                    task[1].create_at ||
+                                                    ""
                                             ).toLocaleDateString()
                                         }})</Button
                                     >
@@ -112,8 +110,8 @@
                             .filter((e) => !e[1].worker_id && !e[1].done)
                             .sort(
                                 (a, b) =>
-                                    +(a[1].appointment || a[1].create_at||"") -
-                                    +(b[1].appointment || b[1].create_at||"")
+                                    +(a[1].appointment || a[1].create_at || 0) -
+                                    +(b[1].appointment || b[1].create_at || 0)
                             )"
                         class="mb-1"
                     >
@@ -121,7 +119,7 @@
                             <showTask
                                 :task="task[1]"
                                 :group="group"
-                                :groupUser="groupUser"
+                                :groupUser="group.users"
                                 :user="user"
                                 :task-id="+task[0]"
                                 v-model="showModal"
@@ -186,12 +184,11 @@ import { closeModal } from "../../global";
 const props = withDefaults(
     defineProps<{
         group: type.Group;
-        groupUser: type.User[];
         user: type.User;
     }>(),
     {}
 );
-const { group, groupUser, user } = toRefs(props);
+const { group, user } = toRefs(props);
 
 const addModal = ref(false);
 const showModal = ref(false);

@@ -5,7 +5,7 @@ export type Errors = { [key: string]: any };
 export interface Group {
   id: Id;
   name: string;
-  users: Id[];
+  users: User[];
   tasks: Tasks;
   is_public: boolean
 }
