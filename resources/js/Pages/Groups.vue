@@ -4,25 +4,8 @@
     <AuthenticatedLayout>
         <div v-if="groups.length == 0">
             <h4>Du hast noch keine Gruppe</h4>
-            <div>
-                <Button class="me-2 btn btn-primary" @click="view = 'search'"
-                    >Gruppe Suche</Button
-                >
-                <Button class="btn btn-primary" @click="view = 'create'"
-                    >Gruppe erstellen</Button
-                >
-            </div>
-            <div>
-                <createGroup
-                    v-if="view == 'create'"
-                    v-model="view"
-                    :user="user"
-                ></createGroup>
-                <searchGroup :user="user" v-if="view == 'search'"></searchGroup>
-            </div>
-        </div>
-        <div v-else>
             <h4
+                v-if="groups.length > 0"
                 v-for="e of groups"
                 :class="
                     group?.name == e.name
@@ -35,7 +18,7 @@
             </h4>
             <showGroup :group="group" :user="user"></showGroup>
             <div class="mt-2">
-                <h3>weitere Gruppe finden</h3>
+                <h3>Gruppe finden</h3>
                 <searchGroup :user="user"></searchGroup>
             </div>
             <div class="mt-2">
