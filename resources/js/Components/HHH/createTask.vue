@@ -36,7 +36,7 @@
 </template>
 <script setup lang="ts">
 import { ref, toRefs } from "vue";
-import { router, useForm } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 import * as type from "../../types/type";
 import {
     TextInput,

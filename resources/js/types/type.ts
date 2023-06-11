@@ -6,7 +6,7 @@ export interface Group {
   id: Id;
   name: string;
   users: User[];
-  tasks: Tasks;
+  tasks: Task[];
   is_public: boolean
 }
 export interface User {
@@ -27,9 +27,8 @@ export interface ShoppingList {
   allShoppingItems: ShoppingKey[];
 }
 
-export type Tasks = { [key: Id]: Task };
-
 export interface Task {
+  id: Id;
   title: string;
   notes: string;
   done: boolean;

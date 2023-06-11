@@ -1,30 +1,32 @@
 <template>
     Ersteller: {{ creator?.name }}
-    <TextInput placeholder="kurz Beschreibung" v-model="title"></TextInput>
-
+    <TextInput placeholder="kurz Beschreibung" v-model="editForm.title"></TextInput>
+<InputError :message="editForm.errors.title" />
     <SelectInput
         :disabled="dashboard"
         placeholder="zugewiesen"
         v-model="searchSelect"
-        :options="groupUser"
-        :option-projection="(e) => e.name"
-        @select-item="(e) => (worker = e.id)"
+        :options="group.users"
+        :option-projection="(e:type.User) => e.name"
+        @select-item="(e:type.User) => (editForm.worker_id = e.id)"
     ></SelectInput>
-
+<InputError :message="editForm.errors.worker_id" />
     <RadioGroup
         class="mt-2 p-0 py-2"
-        v-model="repeat"
+        v-model="editForm.repeat"
         :options="repeatOptions"
     ></RadioGroup>
+    <InputError :message="editForm.errors.repeat" />
     <DateInput
         placeholder="nächster Termin"
         v-model="appointment"
-        v-if="repeat >= 1"
+        v-if="editForm.repeat >= 1"
     ></DateInput>
     <TextareaInput
         placeholder="Notizen (optinoal)"
-        v-model="notes"
+        v-model="editForm.notes"
     ></TextareaInput>
+    <InputError :message="editForm.errors.notes" />
     erstellt
     <div class="d-flex">
         <div class="w-50 me-2">
@@ -44,19 +46,13 @@
     </div>
 
     <div class="my-2">
-        <CheckboxInput v-model="done">erledigt</CheckboxInput>
+        <CheckboxInput v-model="editForm.done">erledigt</CheckboxInput>
     </div>
     <div class="d-flex">
-        <Button class="btn btn-primary me-2" @click="editTask(false)"
+        <Button class="btn btn-primary me-2" @click="editTask()"
             >speichern</Button
         >
-        <Button
-            class="btn btn-primary me-2"
-            @click="editTask(true)"
-            v-if="done && repeat != 0"
-            >neu anlegen</Button
-        >
-        <Button class="btn btn-danger" @click="deleteTask(group.id, taskId)"
+        <Button class="btn btn-danger" @click="deleteTask()"
             >delete</Button
         >
     </div>
@@ -75,42 +71,53 @@ import {
     CheckboxInput,
 } from "custom-mbd-components";
 import { repeatOptions, closeModal } from "../../global";
-import { addTask, deleteTask } from "../../api";
+import { useForm } from "@inertiajs/vue3";
+import InputError from "../InputError.vue";
 
 const props = withDefaults(
     defineProps<{
         group: type.Group;
-        groupUser: type.User[];
-        user: type.User;
         task: type.Task;
-        taskId: type.Id;
         dashboard?: boolean;
     }>(),
     {
         dashboard: false,
     }
 );
-const { group, groupUser, user, task, taskId } = toRefs(props);
-
-const repeat = ref(task.value.repeat);
-const title = ref(task.value.title);
-const notes = ref(task.value.notes);
+const { group, task } = toRefs(props);
 const createDate = ref(task.value.create_at || "");
 const createTime = ref(task.value.create_at || "");
 const searchSelect = ref(
-    groupUser.value.find((e) => e.id == task.value.worker_id)?.name || ""
+    group.value.users.find((e) => e.id == task.value.worker_id)?.name || ""
 );
-const done = ref(task.value.done);
-const worker = ref(task.value.worker_id);
+const editForm = useForm({
+    title: task.value.title,
+    notes: task.value.notes,
+    done: task.value.done,
+    creator_id: task.value.creator_id,
+    repeat: task.value.repeat,
+    worker_id: task.value.worker_id,
+});
+const deleteForm=useForm({
+group_id:group.value.id,
+task_id:task.value.id
+});
+function deleteTask(){
+    deleteForm.post(`api/${task.value.id}/deleteTask`, {
+        onSuccess: () => {
+            closeModal();
+        },
+    });
+}
 const appointment = computed({
     get() {
         let newAppointment = new Date();
         const date = task.value.appointment
             ? new Date(task.value.appointment)
             : new Date();
-        if (!done.value || repeat.value == 0) newAppointment = date;
+        if (!editForm.done || editForm.repeat == 0) newAppointment = date;
         else {
-            switch (repeat.value) {
+            switch (editForm.repeat) {
                 case 1:
                     newAppointment = newDateValue(date, 1);
                     break;
@@ -137,27 +144,17 @@ function newDateValue(date: Date, day = 0, month = 0) {
 }
 
 const creator = computed(() => {
-    return groupUser.value.find((e) => e.id == task.value.creator_id);
+    return group.value.users.find((e) => e.id == task.value.creator_id);
 });
 
-async function editTask(makeRepeat = false) {
-    const editTask = {
-        title: title.value,
-        notes: notes.value,
-        done: done.value,
-        creator_id: user.value.id,
-        repeat: repeat.value,
-        worker_id: worker.value,
-        appointment: appointment.value,
-    };
-    if (makeRepeat) {
-        editTask.done = false;
-        editTask.appointment = appointment.value;
-    }
-    try {
-        await addTask(group.value.id, taskId.value, editTask);
-        closeModal();
-    } catch {}
+async function editTask() {
+    editForm.post(`api/${group.value.id}/${task.value.id}/editTask`, {
+        onSuccess: () => {
+            editForm.reset();
+            searchSelect.value = "";
+            closeModal();
+        },
+    });
 }
 </script>
 <style scoped></style>

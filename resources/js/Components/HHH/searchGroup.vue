@@ -1,10 +1,11 @@
 <template>
     <div>
-        <SearchInput placeholder="Gruppe" v-model="groupSearch">
+        <SearchInput placeholder="Gruppe" v-model="searchForm.name">
             <template #button
-                ><Button sideButton @click="getGroups">suche</Button></template
+                ><Button sideButton @click="searchGroup">suche</Button></template
             >
         </SearchInput>
+        <InputError :message="searchForm.errors.name" />
         <div
             v-for="group of searchGroups"
             class="d-flex justify-content-between mt-2"
@@ -14,30 +15,29 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, toRefs } from "vue";
+import { ref } from "vue";
 import * as type from "../../types/type";
 import { SearchInput, Button } from "custom-mbd-components";
-import { searchGroup, joinGroup } from "../../api";
-const props = withDefaults(
-    defineProps<{ user: type.User; groups: type.Group[] }>(),
-    {}
-);
-const { user, groups } = toRefs(props);
-const searchGroups = ref<type.Group[]>([]);
-const groupSearch = ref("");
+import InputError from "../InputError.vue";
+import { useForm } from "@inertiajs/vue3";
+import axios from "axios";
 
+const searchGroups = ref<type.Group[]>([]);
+
+const searchForm=useForm({
+name:""
+});
+const joinForm=useForm({});
 async function join(group: type.Group) {
-    await joinGroup(group.id, user.value.id);
-    group.users.push(user.value.id);
-    groups.value.push(group);
+joinForm.post(`api/${group.id}/joinGroup`,{
+    onSuccess:()=>{
+        searchGroups.value=searchGroups.value.filter(e=>e.id!=group.id)
+    }
+});
 }
 
-async function getGroups() {
-    try {
-        searchGroups.value = await searchGroup(groupSearch.value);
-    } catch {
-        console.log("fail");
-    }
+async function searchGroup() {
+    searchGroups.value=(await axios.post("api/searchGroup", searchForm)).data;
 }
 </script>
 <style scoped></style>

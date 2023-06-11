@@ -149,7 +149,7 @@
                     <div class="d-flex justify-content-end">
                         <Button
                             class="btn btn-danger me-2 w-50"
-                            @click="leaveGroup(group.id, user.id)"
+                            @click="leaveGroup(group.id)"
                             >Ja</Button
                         >
                         <Button
@@ -172,14 +172,13 @@
     </div>
 </template>
 <script setup lang="ts">
-import { computed, ref, toRefs, watch } from "vue";
+import { computed, ref, toRefs } from "vue";
 import * as type from "../../types/type";
 import { Modal, Accordion, Button } from "custom-mbd-components";
 import createTask from "./createTask.vue";
 import showTask from "./showTask.vue";
-import { leaveGroup } from "../../api";
 import { closeModal } from "../../global";
-// import showShoppingList from './showShoppingList.vue';
+import { useForm } from "@inertiajs/vue3";
 
 const props = withDefaults(
     defineProps<{
@@ -203,7 +202,6 @@ const accordionItems = computed(() => {
     });
     array.push({ title: "Meine Aufgaben", hash: "myTasks" });
     array.push({ title: "Aufgaben", hash: "tasks" });
-    // array.push({ title: 'Einkaufsliste', hash: 'shoppingList' });
     array.push({
         title: "verlassen",
         hash: "leave",
@@ -211,5 +209,16 @@ const accordionItems = computed(() => {
     });
     return array;
 });
+const leaveForm=useForm({
+
+});
+
+function leaveGroup(groupId: type.Id) {
+    leaveForm.post(`api/${groupId}/leaveGroup`, {
+        onSuccess: () => {
+            closeModal();
+        },
+    });
+}
 </script>
 <style scoped></style>

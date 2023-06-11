@@ -22,6 +22,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth')->group(
     function () {
-        Route::post("/{group}/addTask", [GroupController::class, "addTask"]);
+        Route::controller(TaskController::class)->group(function () {
+            Route::post("/{group}/addTask",  "addTask");
+            Route::post("/{group}/{task}/editTask",  "editTask");
+            Route::post("/{task}/deleteTask",  "deleteTask");
+        });
+        Route::controller(GroupController::class)->group(function () {
+            Route::post("/addGroup",  "addGroup");
+            Route::post("/searchGroup",  "searchGroup");
+            Route::post("/{group}/joinGroup",  "joinGroup");
+            Route::post("/{group}/leaveGroup",  "leaveGroup");
+        });
     }
 );

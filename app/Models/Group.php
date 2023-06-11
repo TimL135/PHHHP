@@ -18,6 +18,7 @@ class Group extends Model
      */
     protected $fillable = [
         'name',
+        "owner_id",
         'is_public',
     ];
     protected $appends = [];
