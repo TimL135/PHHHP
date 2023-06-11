@@ -21,7 +21,10 @@ class DatabaseSeeder extends Seeder
             "password" => Hash::make("admin"),
         ]);
         \App\Models\Group::factory()->create([
-            'name' => 'Test Group',
+            'owner_id' => 1,
+            'is_public' => true,
+        ]);
+        \App\Models\Group::factory()->create([
             'owner_id' => 1,
             'is_public' => true,
         ]);
@@ -33,6 +36,10 @@ class DatabaseSeeder extends Seeder
         \App\Models\GroupUser::factory()->create([
             'user_id' => 1,
             'group_id' => 1,
+        ]);
+        \App\Models\GroupUser::factory()->create([
+            'user_id' => 1,
+            'group_id' => 2,
         ]);
     }
 }

@@ -1,4 +1,4 @@
-export type Id = number;
+export type Id = string;
 export type ShoppingKey = string;
 export type ShoppingAmount = string;
 export type Errors = { [key: string]: any };
@@ -10,7 +10,7 @@ export interface Group {
   is_public: boolean
 }
 export interface User {
-  id: number;
+  id: Id;
   name: string;
   email: string;
   email_verified_at: string;

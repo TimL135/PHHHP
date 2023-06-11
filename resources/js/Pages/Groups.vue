@@ -4,19 +4,20 @@
     <AuthenticatedLayout>
         <div>
             <h4 v-if="groups.length == 0">Du hast noch keine Gruppe</h4>
-            <h4
+            <Button
                 v-if="groups.length > 0"
                 v-for="e of groups"
+                class="m-1 btn"
                 :class="
-                    group?.name == e.name
-                        ? 'text-decoration-underline text-primary'
-                        : ''
+                    groups.find(e=>e.id==group)?.name == e.name
+                        ? 'btn-success'
+                        : 'btn-primary'
                 "
-                @click="group = e"
+                @click="group = e.id"
             >
                 {{ e.name }}
-            </h4>
-            <showGroup :group="group" :user="user"></showGroup>
+            </Button>
+            <showGroup :group="groups.find(e=>e.id==group)" :user="user"></showGroup>
             <div class="mt-2">
                 <h3>Gruppe finden</h3>
                 <searchGroup :user="user" :groups="[]"></searchGroup>
@@ -46,6 +47,6 @@ const { user, groups } = toRefs(props);
 
 const view = ref("");
 
-const group = ref({} as type.Group);
+const group = ref("");
 </script>
 <style scoped></style>

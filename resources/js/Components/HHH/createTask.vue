@@ -10,8 +10,8 @@
             placeholder="zuweisen"
             v-model="searchSelect"
             :options="groupUser"
-            :option-projection="(e) => e.name"
-            @select-item="(e) => (form.worker_id = e.id)"
+            :option-projection="(e: type.User) => e.name"
+            @select-item="(e: type.User) => (form.worker_id = e.id)"
         ></SelectInput>
         <InputError :message="form.errors.worker_id" />
         <RadioGroup
@@ -65,7 +65,7 @@ const form = useForm({
     done: false,
     creator_id: user.value.id,
     repeat: 0,
-    worker_id: null,
+    worker_id: null as type.Id | null,
     appointment: "",
 });
 const searchSelect = ref("");
@@ -75,6 +75,7 @@ function submit() {
         onSuccess: () => {
             form.reset();
             searchSelect.value = "";
+            closeModal();
         },
     });
 }
