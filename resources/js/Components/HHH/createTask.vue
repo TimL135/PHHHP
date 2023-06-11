@@ -36,7 +36,7 @@
 </template>
 <script setup lang="ts">
 import { ref, toRefs } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import * as type from "../../types/type";
 import {
     TextInput,
@@ -72,11 +72,9 @@ const searchSelect = ref("");
 
 function submit() {
     form.post(`api/${group.value.id}/addTask`, {
-        preserveScroll: true,
         onSuccess: () => {
             form.reset();
             searchSelect.value = "";
-            console.log(searchSelect.value);
         },
     });
 }

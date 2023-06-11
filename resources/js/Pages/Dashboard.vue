@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, toRefs } from "vue";
 import * as type from "../types/type";
 import showTask from "../Components/HHH/showTask.vue";
 import { Modal } from "custom-mbd-components";
 
-const user = ref(usePage().props.auth.user);
-const groups = ref(usePage().props.groups as type.Group[]);
+const props = withDefaults(
+    defineProps<{ user: type.User;groups:type.Group[]}>(),
+    {}
+);
+const { user,groups } = toRefs(props);
+
 const tasksToday = ref<type.Group[]>(
     groups.value.map((group) => ({
         ...group,
@@ -33,7 +37,7 @@ const tasksToday = ref<type.Group[]>(
     <AuthenticatedLayout>
         <div class="d-flex flex-column align-items-center">
             <h1 v-if="user">Moin, {{ user.name }}</h1>
-            <div v-if="tasksToday.length > 0" class="mt-4">
+            <div v-if="tasksToday?.length > 0" class="mt-4">
                 <h3 class="mb-2">Aufgaben für heute</h3>
                 <div v-for="e of tasksToday">
                     <h4 class="mb-2">{{ e.name }}</h4>

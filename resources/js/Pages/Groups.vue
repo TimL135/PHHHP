@@ -2,8 +2,8 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div v-if="groups.length == 0">
-            <h4>Du hast noch keine Gruppe</h4>
+        <div>
+            <h4 v-if="groups.length == 0">Du hast noch keine Gruppe</h4>
             <h4
                 v-if="groups.length > 0"
                 v-for="e of groups"
@@ -19,7 +19,7 @@
             <showGroup :group="group" :user="user"></showGroup>
             <div class="mt-2">
                 <h3>Gruppe finden</h3>
-                <searchGroup :user="user"></searchGroup>
+                <searchGroup :user="user" :groups="[]"></searchGroup>
             </div>
             <div class="mt-2">
                 <h3>neue Gruppe erstellen</h3>
