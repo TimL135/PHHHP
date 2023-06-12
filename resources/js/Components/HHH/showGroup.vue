@@ -33,8 +33,8 @@
                             .filter((e) => e[1].done == done)
                             .sort(
                                 (a, b) =>
-                                    +(a[1].appointment || a[1].create_at || 0) -
-                                    +(b[1].appointment || b[1].create_at || 0)
+                                    +(a[1].appointment || a[1].created_at ) -
+                                    +(b[1].appointment || b[1].created_at )
                             )"
                         class="mb-1"
                     >
@@ -53,8 +53,7 @@
                                         >{{ task[1].title }} ({{
                                             new Date(
                                                 task[1].appointment ||
-                                                    task[1].create_at ||
-                                                    ""
+                                                    task[1].created_at
                                             ).toLocaleDateString()
                                         }})</Button
                                     >
@@ -73,8 +72,8 @@
                             .filter((e) => e[1].worker_id || e[1].done == true)
                             .sort(
                                 (a, b) =>
-                                    +(a[1].appointment || a[1].create_at || 0) -
-                                    +(b[1].appointment || b[1].create_at || 0)
+                                    +(a[1].appointment || a[1].created_at ) -
+                                    +(b[1].appointment || b[1].created_at )
                             )"
                         class="mb-1"
                     >
@@ -93,8 +92,7 @@
                                         >{{ task[1].title }} ({{
                                             new Date(
                                                 task[1].appointment ||
-                                                    task[1].create_at ||
-                                                    ""
+                                                    task[1].created_at
                                             ).toLocaleDateString()
                                         }})</Button
                                     >
@@ -110,8 +108,8 @@
                             .filter((e) => !e[1].worker_id && !e[1].done)
                             .sort(
                                 (a, b) =>
-                                    +(a[1].appointment || a[1].create_at || 0) -
-                                    +(b[1].appointment || b[1].create_at || 0)
+                                    +(a[1].appointment || a[1].created_at) -
+                                    +(b[1].appointment || b[1].created_at)
                             )"
                         class="mb-1"
                     >
@@ -130,8 +128,7 @@
                                         >{{ task[1].title }} ({{
                                             new Date(
                                                 task[1].appointment ||
-                                                    task[1].create_at ||
-                                                    ""
+                                                    task[1].created_at 
                                             ).toLocaleDateString()
                                         }})</Button
                                     >
@@ -147,6 +144,7 @@
                         <Button
                             class="btn btn-danger me-2 w-50"
                             @click="leaveGroup(group.id)"
+                            :loading="leaveForm.processing"
                             >Ja</Button
                         >
                         <Button

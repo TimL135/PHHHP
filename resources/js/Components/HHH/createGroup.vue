@@ -2,7 +2,9 @@
     <div>
         <TextInput placeholder="name" v-model="form.name">
             <template #button>
-                <Button sideButton @click="create">erstellen</Button>
+                <Button sideButton @click="create" :loading="form.processing"
+                    >erstellen</Button
+                >
             </template>
         </TextInput>
         <InputError :message="form.errors.name" />

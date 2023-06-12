@@ -31,7 +31,9 @@
             v-model="form.notes"
         ></TextareaInput>
         <InputError :message="form.errors.notes" />
-        <Button class="btn btn-primary w-100 mt-2">erstellen</Button>
+        <Button class="btn btn-primary w-100 mt-2" :loading="form.processing"
+            >erstellen</Button
+        >
     </form>
 </template>
 <script setup lang="ts">

@@ -35,7 +35,7 @@ export interface Task {
   creator_id: Id;
   worker_id?: Id;
   appointment: string;
-  create_at?: string;
+  created_at: string;
   doneAt?: string;
   repeat: 0 | 1 | 7 | 14 | 31;
 }

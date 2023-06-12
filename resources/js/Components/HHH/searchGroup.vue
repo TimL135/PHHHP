@@ -2,7 +2,10 @@
     <div>
         <SearchInput placeholder="Gruppe" v-model="searchForm.search">
             <template #button
-                ><Button sideButton @click="searchGroup"
+                ><Button
+                    sideButton
+                    @click="searchGroup"
+                    :loading="searchForm.processing"
                     >suche</Button
                 ></template
             >
@@ -12,7 +15,10 @@
             v-for="group of searchGroups"
             class="d-flex justify-content-between mt-2"
         >
-            {{ group.name }}<Button @click="join(group)">join</Button>
+            {{ group.name }}
+            <Button @click="join(group)" :loading="joinForm.processing"
+                >join</Button
+            >
         </div>
     </div>
 </template>

@@ -19,7 +19,7 @@ const tasksToday = ref<type.Group[]>(
             .filter(
                 (e) =>
                     new Date(
-                        e.appointment || e.create_at || ""
+                        e.appointment || e.created_at
                     ).toLocaleDateString() == new Date().toLocaleDateString()
             )
             .filter((e) => e.worker_id == user.value.id || e.worker_id == null)
@@ -55,8 +55,7 @@ const tasksToday = ref<type.Group[]>(
                                         >{{ task[1].title }} ({{
                                             new Date(
                                                 task[1].appointment ||
-                                                    task[1].create_at ||
-                                                    ""
+                                                    task[1].created_at
                                             ).toLocaleDateString()
                                         }})</Button
                                     >
