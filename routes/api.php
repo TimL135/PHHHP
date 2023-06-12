@@ -22,17 +22,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth')->group(
     function () {
-        Route::controller(TaskController::class)->group(function () {
-            Route::post("/{group}/addTask",  "addTask");
-            Route::post("/{group}/{task}/editTask",  "editTask");
-            Route::post("/{task}/deleteTask",  "deleteTask");
-        });
+        Route::middleware('isGroupUser')->group(
+            function () {
+                Route::controller(TaskController::class)->group(function () {
+                    Route::post("/{group}/addTask",  "addTask");
+                    Route::post("/{group}/{task}/editTask",  "editTask");
+                    Route::post("/{task}/deleteTask",  "deleteTask");
+                });
+            }
+        );
         Route::controller(GroupController::class)->group(function () {
             Route::post("/addGroup",  "addGroup");
             Route::get("/searchGroup",  "searchGroup");
             Route::post("/{group}/joinGroup",  "joinGroup");
             Route::post("/{group}/leaveGroup",  "leaveGroup");
-            Route::post("/{group}/editSettingsGroup",  "editSettingsGroup")->middleware("hasGroupPermission");
+            Route::post("/{group}/editSettingsGroup",  "editSettingsGroup")->middleware("isGroupAdmin");
         });
     }
 );

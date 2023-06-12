@@ -6,7 +6,7 @@ use Closure;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 
-class HasGroupPermission
+class IsGroupAdmin
 {
     /**
      * Handle an incoming request.

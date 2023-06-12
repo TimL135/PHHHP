@@ -157,6 +157,10 @@ const creator = computed(() => {
 });
 
 async function editTask() {
+    editForm.transform((data)=>({
+        ...data,
+        appointment:appointment.value
+    }))
     editForm.post(`api/${group.value.id}/${task.value.id}/editTask`, {
         onSuccess: () => {
             editForm.reset();

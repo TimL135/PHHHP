@@ -27,15 +27,18 @@ class TaskController extends Controller
     public function editTask(Request $request, Group $group, Task $task)
     {
         $validated  = $request->validate([
-            "appointment" => "nullable|string",
+            "appointment" => "required|string",
             "done" => "required|boolean",
             "notes" => "nullable|string",
             "repeat" => "required|numeric",
             "title" => "required|string",
             "worker_id" => "nullable|exists:users,id",
         ]);
-        if ($group->users(Auth::user())->exists())
+        if ($group->users(Auth::user())->exists()) {
+            if ($validated["done"] == true && $validated["repeat"] > 0)
+                $validated["done"] = false;
             $task->fill($validated);
+        }
         $task->save();
         return to_route("groups");
     }
