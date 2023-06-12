@@ -141,9 +141,6 @@
                     </div>
                 </div>
             </template>
-            <!-- <template #shoppingList>
-        <showShoppingList :group="group" :user="user"></showShoppingList>
-      </template> -->
             <template #leave>
                 <Modal :title="`${group.name} verlassen?`">
                     <div class="d-flex justify-content-end">
@@ -209,9 +206,7 @@ const accordionItems = computed(() => {
     });
     return array;
 });
-const leaveForm=useForm({
-
-});
+const leaveForm = useForm({});
 
 function leaveGroup(groupId: type.Id) {
     leaveForm.post(`api/${groupId}/leaveGroup`, {
