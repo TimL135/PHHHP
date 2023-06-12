@@ -1,11 +1,13 @@
 <template>
     <div>
-        <SearchInput placeholder="Gruppe" v-model="searchForm.name">
+        <SearchInput placeholder="Gruppe" v-model="searchForm.search">
             <template #button
-                ><Button sideButton @click="searchGroup">suche</Button></template
+                ><Button sideButton @click="searchGroup"
+                    >suche</Button
+                ></template
             >
         </SearchInput>
-        <InputError :message="searchForm.errors.name" />
+        <InputError :message="searchForm.errors.search" />
         <div
             v-for="group of searchGroups"
             class="d-flex justify-content-between mt-2"
@@ -19,25 +21,33 @@ import { ref } from "vue";
 import * as type from "../../types/type";
 import { SearchInput, Button } from "custom-mbd-components";
 import InputError from "../InputError.vue";
-import { useForm } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import axios from "axios";
+import { toRefs } from "vue";
+const props = withDefaults(
+    defineProps<{
+        searchGroups: type.Group[];
+    }>(),
+    {}
+);
+const { searchGroups } = toRefs(props);
 
-const searchGroups = ref<type.Group[]>([]);
-
-const searchForm=useForm({
-name:""
+const searchForm = useForm({
+    search: "",
 });
-const joinForm=useForm({});
+const joinForm = useForm({});
 async function join(group: type.Group) {
-joinForm.post(`api/${group.id}/joinGroup`,{
-    onSuccess:()=>{
-        searchGroups.value=searchGroups.value.filter(e=>e.id!=group.id)
-    }
-});
+    joinForm.post(`api/${group.id}/joinGroup`, {
+        onSuccess: () => {
+            searchGroups.value = searchGroups.value.filter(
+                (e) => e.id != group.id
+            );
+        },
+    });
 }
 
 async function searchGroup() {
-    searchGroups.value=(await axios.post("api/searchGroup", searchForm)).data;
+    router.reload({ only: ["searchGroups"], data: searchForm.data() });
 }
 </script>
 <style scoped></style>

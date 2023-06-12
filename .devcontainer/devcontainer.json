@@ -20,7 +20,8 @@
                 "Vue.volar",
                 "esbenp.prettier-vscode",
                 "yoavbls.pretty-ts-errors",
-                "GitHub.copilot"
+                "GitHub.copilot",
+                "GitHub.copilot-labs"
             ]
         }
     },

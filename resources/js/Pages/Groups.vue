@@ -9,7 +9,7 @@
                 v-for="e of groups"
                 class="m-1 btn"
                 :class="
-                    groups.find(e=>e.id==group)?.name == e.name
+                    groups.find((e) => e.id == group)?.name == e.name
                         ? 'btn-success'
                         : 'btn-primary'
                 "
@@ -17,10 +17,16 @@
             >
                 {{ e.name }}
             </Button>
-            <showGroup :group="groups.find(e=>e.id==group)" :user="user"></showGroup>
+            <showGroup
+                :group="groups.find((e) => e.id == group)"
+                :user="user"
+            ></showGroup>
             <div class="mt-2">
                 <h3>Gruppe finden</h3>
-                <searchGroup :user="user" :groups="[]"></searchGroup>
+                <searchGroup
+                    :user="user"
+                    :searchGroups="searchGroups"
+                ></searchGroup>
             </div>
             <div class="mt-2">
                 <h3>neue Gruppe erstellen</h3>
@@ -40,9 +46,16 @@ import searchGroup from "../Components/HHH/searchGroup.vue";
 import { Button } from "custom-mbd-components";
 
 const props = withDefaults(
-    defineProps<{ user: type.User; groups: type.Group[] }>(),
-    {}
+    defineProps<{
+        user: type.User;
+        groups: type.Group[];
+        searchGroups?: type.Group[];
+    }>(),
+    {
+        searchGroups: [] as type.Group[],
+    }
 );
+
 const { user, groups } = toRefs(props);
 
 const view = ref("");

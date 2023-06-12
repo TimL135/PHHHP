@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-
+use Illuminate\Database\Eloquent\Builder;
 
 class Group extends Model
 {
@@ -48,5 +48,11 @@ class Group extends Model
     public function owner()
     {
         return $this->hasOne(User::class);
+    }
+    public static function withoutUser(User $user)
+    {
+        return Group::whereDoesntHave("users", function (Builder $query) use ($user) {
+            $query->where("user_id", "=", $user->id);
+        });
     }
 }

@@ -3,13 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
-use App\Models\GroupUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Inertia\Inertia;
 
 class GroupController extends Controller
 {
+    public function index(Request $request)
+    {
+        $request->validate([
+            "search" => "nullable|string",
+        ]);
+        return Inertia::render('Groups', [
+            "groups" => Auth::user()->groups()->with(["tasks", "users"])->get(),
+            "searchGroups" => $request->search ?  Group::withoutUser(Auth::user())->where("name", "like", "%" . $request->search . "%")->get() : []
+        ]);
+    }
     public function addGroup(Request $request)
     {
         $request->validate([
@@ -24,9 +34,9 @@ class GroupController extends Controller
     public function searchGroup(Request $request)
     {
         $request->validate([
-            "name" => "required|string",
+            "search" => "required|string",
         ]);
-        return Group::where("name", "like", "%" . $request->name . "%")->whereDoesntHave("users", function (Builder $query) {
+        return Group::where("name", "like", "%" . $request->search . "%")->whereDoesntHave("users", function (Builder $query) {
             $query->where("user_id", "=", Auth::id());
         })->get();
     }

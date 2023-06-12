@@ -29,7 +29,7 @@ Route::middleware('auth')->group(
         });
         Route::controller(GroupController::class)->group(function () {
             Route::post("/addGroup",  "addGroup");
-            Route::post("/searchGroup",  "searchGroup");
+            Route::get("/searchGroup",  "searchGroup");
             Route::post("/{group}/joinGroup",  "joinGroup");
             Route::post("/{group}/leaveGroup",  "leaveGroup");
         });
