@@ -18,6 +18,7 @@
                 {{ e.name }}
             </Button>
             <showGroup
+                v-if="group"
                 :group="groups.find((e) => e.id == group)"
                 :user="user"
             ></showGroup>

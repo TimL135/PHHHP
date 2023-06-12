@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('owner_id')->constrained(table: 'users');
-            $table->boolean("is_public")->default(true);
+            $table->boolean("is_public")->default(false);
             $table->timestamps();
         });
     }

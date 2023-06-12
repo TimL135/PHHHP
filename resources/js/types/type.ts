@@ -7,6 +7,7 @@ export interface Group {
   name: string;
   users: User[];
   tasks: Task[];
+  owner_id: Id;
   is_public: boolean
 }
 export interface User {

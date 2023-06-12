@@ -31,24 +31,24 @@ class GroupController extends Controller
         $group->save();
         return to_route("groups");
     }
-    public function searchGroup(Request $request)
-    {
-        $request->validate([
-            "search" => "required|string",
-        ]);
-        return Group::where("name", "like", "%" . $request->search . "%")->whereDoesntHave("users", function (Builder $query) {
-            $query->where("user_id", "=", Auth::id());
-        })->get();
-    }
     public function joinGroup(Request $request, Group $group)
     {
-        if (!$group->users(Auth::user())->exists())
-            $group->users()->attach(Auth::user());
+        $group->users()->syncWithoutDetaching(Auth::user());
         return to_route("groups");
     }
     public function leaveGroup(Request $request, Group $group)
     {
         $group->users()->detach(Auth::user());
+        return to_route("groups");
+    }
+    public function editSettingsGroup(Request $request, Group $group)
+    {
+        $request->validate([
+            "name" => "required|string|unique:groups,name",
+            "is_public" => "required|boolean"
+        ]);
+        $group->fill($request->all());
+        $group->save();
         return to_route("groups");
     }
 }

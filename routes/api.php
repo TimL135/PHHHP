@@ -32,6 +32,7 @@ Route::middleware('auth')->group(
             Route::get("/searchGroup",  "searchGroup");
             Route::post("/{group}/joinGroup",  "joinGroup");
             Route::post("/{group}/leaveGroup",  "leaveGroup");
+            Route::post("/{group}/editSettingsGroup",  "editSettingsGroup")->middleware("hasGroupPermission");
         });
     }
 );

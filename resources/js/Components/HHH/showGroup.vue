@@ -6,6 +6,31 @@
                     {{ user.name }}
                 </div>
             </template>
+            <template #settings>
+                <div>
+                    <TextInput
+                        placeholder="name"
+                        v-model="settingsForm.name"
+                    ></TextInput>
+                    <InputError :message="settingsForm.errors.name" />
+                    <div class="my-2">
+                        <CheckboxInput v-model="settingsForm.is_public">
+                            öffentlich
+                        </CheckboxInput>
+                        <InputError :message="settingsForm.errors.is_public" />
+                    </div>
+
+                    <div class="m-1">
+                        <Button
+                            class="btn btn-primary w-100"
+                            @click="editSettings()"
+                            :loading="settingsForm.processing"
+                        >
+                            speichern
+                        </Button>
+                    </div>
+                </div>
+            </template>
             <template #addTask>
                 <Modal title="Aufgabe hinzufügen" v-model="addModal">
                     <createTask
@@ -33,8 +58,8 @@
                             .filter((e) => e[1].done == done)
                             .sort(
                                 (a, b) =>
-                                    +(a[1].appointment || a[1].created_at ) -
-                                    +(b[1].appointment || b[1].created_at )
+                                    +(a[1].appointment || a[1].created_at) -
+                                    +(b[1].appointment || b[1].created_at)
                             )"
                         class="mb-1"
                     >
@@ -72,8 +97,8 @@
                             .filter((e) => e[1].worker_id || e[1].done == true)
                             .sort(
                                 (a, b) =>
-                                    +(a[1].appointment || a[1].created_at ) -
-                                    +(b[1].appointment || b[1].created_at )
+                                    +(a[1].appointment || a[1].created_at) -
+                                    +(b[1].appointment || b[1].created_at)
                             )"
                         class="mb-1"
                     >
@@ -128,7 +153,7 @@
                                         >{{ task[1].title }} ({{
                                             new Date(
                                                 task[1].appointment ||
-                                                    task[1].created_at 
+                                                    task[1].created_at
                                             ).toLocaleDateString()
                                         }})</Button
                                     >
@@ -169,7 +194,13 @@
 <script setup lang="ts">
 import { computed, ref, toRefs } from "vue";
 import * as type from "../../types/type";
-import { Modal, Accordion, Button } from "custom-mbd-components";
+import {
+    Modal,
+    Accordion,
+    Button,
+    TextInput,
+    CheckboxInput,
+} from "custom-mbd-components";
 import createTask from "./createTask.vue";
 import showTask from "./showTask.vue";
 import { closeModal } from "../../global";
@@ -190,6 +221,9 @@ const showModal = ref(false);
 const accordionItems = computed(() => {
     const array = [];
     array.push({ title: "Mitglieder", hash: "users" });
+    if (group.value.owner_id == user.value.id) {
+        array.push({ title: "Einstellungen", hash: "settings" });
+    }
     array.push({
         title: "Aufgabe hinzufügen",
         hash: "addTask",
@@ -204,6 +238,13 @@ const accordionItems = computed(() => {
     });
     return array;
 });
+const settingsForm = useForm({
+    name: group.value.name,
+    is_public: group.value.is_public,
+});
+function editSettings() {
+    settingsForm.post(`api/${group.value.id}/editSettingsGroup`);
+}
 const leaveForm = useForm({});
 
 function leaveGroup(groupId: type.Id) {

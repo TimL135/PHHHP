@@ -4,7 +4,7 @@ import { Head } from "@inertiajs/vue3";
 import { ref, toRefs } from "vue";
 import * as type from "../types/type";
 import showTask from "../Components/HHH/showTask.vue";
-import { Modal } from "custom-mbd-components";
+import { Modal, Button } from "custom-mbd-components";
 
 const props = withDefaults(
     defineProps<{ user: type.User; groups: type.Group[] }>(),
