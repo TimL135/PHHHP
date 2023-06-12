@@ -45,7 +45,9 @@ async function join(group: type.Group) {
 }
 
 async function searchGroup() {
-    router.reload({ only: ["searchGroups"], data: searchForm.data() });
+    if (searchForm.data().search == "")
+        searchForm.errors.search = "The search field is required.";
+    else router.reload({ only: ["searchGroups"], data: searchForm.data() });
 }
 </script>
 <style scoped></style>
