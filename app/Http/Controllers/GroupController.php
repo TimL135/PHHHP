@@ -22,10 +22,10 @@ class GroupController extends Controller
     }
     public function addGroup(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             "name" => "required|string|unique:groups,name",
         ]);
-        $array = [...$request->all(), 'owner_id' => '1'];
+        $array = [...$validated, 'owner_id' => '1'];
         $group = Group::create($array);
 
         $group->save();
@@ -43,11 +43,13 @@ class GroupController extends Controller
     }
     public function editSettingsGroup(Request $request, Group $group)
     {
-        $request->validate([
-            "name" => "required|string|unique:groups,name",
+        $validated = $request->validate([
+            "name" => "required|string",
             "is_public" => "required|boolean"
         ]);
-        $group->fill($request->all());
+        if (Group::where([["name", "=", $validated["name"]], ["id", "!=", $group->id]])->exists())
+            return back()->withErrors(["name" => "The name has already been taken."]);
+        $group->fill($validated);
         $group->save();
         return to_route("groups");
     }

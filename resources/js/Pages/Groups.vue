@@ -9,19 +9,22 @@
                 v-for="e of groups"
                 class="m-1 btn"
                 :class="
-                    groups.find((e) => e.id == group)?.name == e.name
+                    groups.find((e) => e.id == groupId)?.name == e.name
                         ? 'btn-success'
                         : 'btn-primary'
                 "
-                @click="group = e.id"
+                @click="groupId = e.id"
             >
                 {{ e.name }}
             </Button>
-            <showGroup
-                v-if="group"
-                :group="groups.find((e) => e.id == group)"
+            <template v-for="group of groups"> 
+                <showGroup
+                v-if="groupId==group.id"
+                :group="group"
                 :user="user"
-            ></showGroup>
+            ></showGroup> 
+            </template>
+   
             <div class="mt-2">
                 <h3>Gruppe finden</h3>
                 <searchGroup
@@ -59,6 +62,6 @@ const { user, groups } = toRefs(props);
 
 const view = ref("");
 
-const group = ref("");
+const groupId = ref("");
 </script>
 <style scoped></style>

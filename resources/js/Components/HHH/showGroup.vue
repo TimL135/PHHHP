@@ -1,5 +1,5 @@
 <template>
-    <div v-if="group">
+    <div>
         <Accordion :items="accordionItems" v-if="group.users?.length">
             <template #users>
                 <div v-for="user of group.users">
@@ -19,7 +19,6 @@
                         </CheckboxInput>
                         <InputError :message="settingsForm.errors.is_public" />
                     </div>
-
                     <div class="m-1">
                         <Button
                             class="btn btn-primary w-100"
@@ -205,6 +204,8 @@ import createTask from "./createTask.vue";
 import showTask from "./showTask.vue";
 import { closeModal } from "../../global";
 import { useForm } from "@inertiajs/vue3";
+import InputError from "../InputError.vue";
+
 
 const props = withDefaults(
     defineProps<{
@@ -240,7 +241,7 @@ const accordionItems = computed(() => {
 });
 const settingsForm = useForm({
     name: group.value.name,
-    is_public: group.value.is_public,
+    is_public: group.value.is_public
 });
 function editSettings() {
     settingsForm.post(`api/${group.value.id}/editSettingsGroup`);

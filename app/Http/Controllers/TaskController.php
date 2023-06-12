@@ -11,7 +11,7 @@ class TaskController extends Controller
 {
     public function addTask(Request $request, Group $group)
     {
-        $request->validate([
+        $validated = $request->validate([
             "appointment" => "nullable|string",
             "creator_id" => "required|exists:users,id",
             "done" => "required|boolean",
@@ -20,13 +20,13 @@ class TaskController extends Controller
             "title" => "required|string",
             "worker_id" => "nullable|exists:users,id",
         ]);
-        $task = Task::create([...$request->all(), "group_id" => $group->id]);
+        $task = Task::create([...$validated, "group_id" => $group->id]);
         $group->tasks()->save($task);
         return to_route("groups");
     }
     public function editTask(Request $request, Group $group, Task $task)
     {
-        $request->validate([
+        $validated  = $request->validate([
             "appointment" => "nullable|string",
             "done" => "required|boolean",
             "notes" => "nullable|string",
@@ -35,7 +35,7 @@ class TaskController extends Controller
             "worker_id" => "nullable|exists:users,id",
         ]);
         if ($group->users(Auth::user())->exists())
-            $task->fill($request->all());
+            $task->fill($validated);
         $task->save();
         return to_route("groups");
     }
