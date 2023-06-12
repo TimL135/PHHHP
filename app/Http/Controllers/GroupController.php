@@ -17,7 +17,7 @@ class GroupController extends Controller
         ]);
         return Inertia::render('Groups', [
             "groups" => Auth::user()->groups()->with(["tasks", "users"])->get(),
-            "searchGroups" => $request->search ?  Group::withoutUser(Auth::user())->where("name", "like", "%" . $request->search . "%")->get() : []
+            "searchGroups" => $request->search ?  Group::withoutUser(Auth::user())->where([["name", "like", "%" . $request->search . "%"], ["is_public", "=", "1"]])->get() : []
         ]);
     }
     public function addGroup(Request $request)
