@@ -1,32 +1,29 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import { ref, toRefs } from "vue";
 import * as type from "../types/type";
 import showTask from "../Components/HHH/showTask.vue";
 import { Modal } from "custom-mbd-components";
 
 const props = withDefaults(
-    defineProps<{ user: type.User;groups:type.Group[]}>(),
+    defineProps<{ user: type.User; groups: type.Group[] }>(),
     {}
 );
-const { user,groups } = toRefs(props);
+const { user, groups } = toRefs(props);
 
 const tasksToday = ref<type.Group[]>(
     groups.value.map((group) => ({
         ...group,
-        tasks: Object.entries(group.tasks)
+        tasks: group.tasks
             .filter(
                 (e) =>
                     new Date(
-                        e[1].appointment || e[1].create_at || ""
+                        e.appointment || e.create_at || ""
                     ).toLocaleDateString() == new Date().toLocaleDateString()
             )
-            .filter(
-                (e) => e[1].worker_id == user.value.id || e[1].worker_id == null
-            )
-            .filter((e) => e[1].done == false)
-            .reduce((a, b) => ({ ...a, [b[0]]: b[1] }), {}),
+            .filter((e) => e.worker_id == user.value.id || e.worker_id == null)
+            .filter((e) => e.done == false),
     }))
 );
 </script>

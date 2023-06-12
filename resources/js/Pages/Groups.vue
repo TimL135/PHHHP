@@ -49,11 +49,9 @@ const props = withDefaults(
     defineProps<{
         user: type.User;
         groups: type.Group[];
-        searchGroups?: type.Group[];
+        searchGroups: type.Group[];
     }>(),
-    {
-        searchGroups: [] as type.Group[],
-    }
+    {}
 );
 
 const { user, groups } = toRefs(props);

@@ -17,12 +17,10 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
 import * as type from "../../types/type";
 import { SearchInput, Button } from "custom-mbd-components";
 import InputError from "../InputError.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import axios from "axios";
 import { toRefs } from "vue";
 const props = withDefaults(
     defineProps<{
