@@ -33,29 +33,30 @@ const tasksToday = ref<type.Group[]>(
 
     <AuthenticatedLayout>
         <div class="d-flex flex-column align-items-center">
-            <h1 v-if="user">Moin, {{ user.name }}</h1>
+            <div class="h1">Moin, {{ user.name }}</div>
             <div v-if="tasksToday?.length > 0" class="mt-4">
-                <h3 class="mb-2">Aufgaben für heute</h3>
-                <div v-for="e of tasksToday">
-                    <h4 class="mb-2">{{ e.name }}</h4>
-                    <div v-for="task of Object.entries(e.tasks)">
-                        <Modal :title="task[1].title">
+                <div class="mb-2 h2">Aufgaben für heute</div>
+                <div v-for="e of tasksToday" class="mt-2">
+                    <template v-if="e.tasks.length>0">
+                    <div class="mb-2 h4">{{ e.name }}</div>
+                    <div v-for="task of e.tasks">
+                        <Modal :title="task.title">
                             <showTask
                                 dashboard
-                                :task="task[1]"
+                                :task="task"
                                 :group="e"
                                 :groupUser="e.users"
                                 :user="user"
-                                :task-id="+task[0]"
+                                :task-id="task.id"
                             >
                             </showTask>
                             <template #button>
                                 <div class="m-1">
                                     <Button class="btn btn-primary w-100"
-                                        >{{ task[1].title }} ({{
+                                        >{{ task.title }} ({{
                                             new Date(
-                                                task[1].appointment ||
-                                                    task[1].created_at
+                                                task.appointment ||
+                                                    task.created_at
                                             ).toLocaleDateString()
                                         }})</Button
                                     >
@@ -63,6 +64,7 @@ const tasksToday = ref<type.Group[]>(
                             </template>
                         </Modal>
                     </div>
+                </template>
                 </div>
             </div>
         </div>

@@ -37,6 +37,8 @@ Route::middleware('auth')->group(
             Route::post("/{group}/joinGroup",  "joinGroup");
             Route::post("/{group}/leaveGroup",  "leaveGroup");
             Route::post("/{group}/editSettingsGroup",  "editSettingsGroup")->middleware("isGroupAdmin");
+            Route::post("/{group}/{user}/kickGroupUser",  "kickGroupUser")->middleware("isGroupAdmin");
+            Route::post("/{group}/addGroupUser",  "addGroupUser")->middleware("isGroupAdmin");
         });
     }
 );

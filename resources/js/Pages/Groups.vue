@@ -8,46 +8,33 @@
                 v-if="groups.length > 0"
                 v-for="e of groups"
                 class="m-1 btn"
-                :class="
-                    groups.find((e) => e.id == groupId)?.name == e.name
-                        ? 'btn-success'
-                        : 'btn-primary'
-                "
+                :class="groups.find(e => e.id == groupId)?.name == e.name ? 'btn-success' : 'btn-primary'"
                 @click="groupId = e.id"
             >
                 {{ e.name }}
             </Button>
-            <template v-for="group of groups"> 
-                <showGroup
-                v-if="groupId==group.id"
-                :group="group"
-                :user="user"
-            ></showGroup> 
+            <template v-for="group of groups">
+                <showGroup v-if="groupId == group.id" :group="group" :user="user"></showGroup>
             </template>
-   
+
             <div class="mt-2">
-                <h3>Gruppe finden</h3>
-                <searchGroup
-                    :user="user"
-                    :searchGroups="searchGroups"
-                ></searchGroup>
+                <searchGroup :user="user" :searchGroups="searchGroups"></searchGroup>
             </div>
             <div class="mt-2">
-                <h3>neue Gruppe erstellen</h3>
                 <createGroup :user="user" v-model="view"></createGroup>
             </div>
         </div>
     </AuthenticatedLayout>
 </template>
 <script setup lang="ts">
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
-import { ref, toRefs } from "vue";
-import * as type from "../types/type";
-import createGroup from "../Components/HHH/createGroup.vue";
-import showGroup from "../Components/HHH/showGroup.vue";
-import searchGroup from "../Components/HHH/searchGroup.vue";
-import { Button } from "custom-mbd-components";
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head } from '@inertiajs/vue3';
+import { ref, toRefs } from 'vue';
+import * as type from '../types/type';
+import createGroup from '../Components/HHH/createGroup.vue';
+import showGroup from '../Components/HHH/showGroup.vue';
+import searchGroup from '../Components/HHH/searchGroup.vue';
+import { Button } from 'custom-mbd-components';
 
 const props = withDefaults(
     defineProps<{
@@ -60,8 +47,8 @@ const props = withDefaults(
 
 const { user, groups } = toRefs(props);
 
-const view = ref("");
+const view = ref('');
 
-const groupId = ref("");
+const groupId = ref('');
 </script>
 <style scoped></style>

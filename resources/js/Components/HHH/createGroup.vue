@@ -1,6 +1,6 @@
 <template>
     <div>
-        <TextInput placeholder="name" v-model="form.name">
+        <TextInput placeholder="Gruppen name" v-model="form.name">
             <template #button>
                 <Button sideButton @click="create" :loading="form.processing">erstellen</Button>
             </template>

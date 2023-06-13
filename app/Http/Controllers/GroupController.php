@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,7 +35,7 @@ class GroupController extends Controller
             "name" => "required|string|unique:groups,name",
         ]);
         $array = [...$validated, 'owner_id' => Auth::id()];
-        Group::create($array);
+        Group::create($array)->users()->syncWithoutDetaching(Auth::user());
         return to_route("groups");
     }
     public function joinGroup(Request $request, Group $group)
@@ -42,9 +43,23 @@ class GroupController extends Controller
         $group->users()->syncWithoutDetaching(Auth::user());
         return to_route("groups");
     }
+    public function addGroupUser(Request $request, Group $group)
+    {
+        $validated = $request->validate([
+            "email" => "required|exists:users,email",
+        ]);
+        $user = User::where("email", $validated["email"])->first();
+        $group->users()->syncWithoutDetaching($user);
+        return to_route("groups");
+    }
     public function leaveGroup(Request $request, Group $group)
     {
         $group->users()->detach(Auth::user());
+        return to_route("groups");
+    }
+    public function kickGroupUser(Request $request, Group $group, User $user)
+    {
+        $group->users()->detach($user);
         return to_route("groups");
     }
     public function editSettingsGroup(Request $request, Group $group)
