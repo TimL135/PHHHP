@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class Group extends Model
 {
@@ -36,6 +37,14 @@ class Group extends Model
     public function getUsersAttribute()
     {
         return $this->users()->get();
+    }
+    public function getNameAttribute()
+    {
+        return $this->attributes["name"] . "#" . $this->attributes["id"];
+    }
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = Str::beforeLast($value, "#");
     }
     public function users()
     {
