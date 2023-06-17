@@ -27,7 +27,7 @@ class IsGroupAdmin
                 throw new \Exception("middleware HasClubPermission specified without according route parameter to validate, did you forget to typehint the controller method parameter, misspelled the method, or named the route and method parameters diffently?");
             throw new \Exception("middleware HasClubPermission specified without according route parameter to validate");
         }
-        if ($targetGroup->owner_id == Auth::id())
+        if ($targetGroup->owner_id == Auth::id() || $targetGroup->groupUser(Auth::id())->is_admin)
             return $next($request);
         else return abort(401);
     }

@@ -11,13 +11,8 @@ class GroupUser extends Model
 {
     use HasFactory, Notifiable;
     protected $table = "group_user";
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [];
+    protected $with = ["user"];
+    protected $hidden = ["created_at", "updated_at", "user_id", "group_id"];
 
     public function user()
     {
@@ -26,5 +21,9 @@ class GroupUser extends Model
     public function group()
     {
         return $this->belongsTo(Group::class);
+    }
+    public function getIsAdminAttribute()
+    {
+        return $this->attributes["is_admin"] == 1;
     }
 }

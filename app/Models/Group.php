@@ -46,10 +46,6 @@ class Group extends Model
     {
         $this->attributes['name'] = Str::beforeLast($value, "#");
     }
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
-    }
     public function tasks()
     {
         return $this->hasMany(Task::class);
@@ -57,6 +53,10 @@ class Group extends Model
     public function owner()
     {
         return $this->hasOne(User::class);
+    }
+    public function users()
+    {
+        return $this->hasMany(GroupUser::class);
     }
     public static function withoutUser(User $user)
     {
