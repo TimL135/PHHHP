@@ -2,7 +2,6 @@ version: '3.3'
 
 services:
     phhhp:
-        platform: linux/arm64/v8
         env_file: ./.env
         build:
             context: '.'
