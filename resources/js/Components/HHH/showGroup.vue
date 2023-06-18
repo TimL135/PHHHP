@@ -2,25 +2,28 @@
     <div>
         <Accordion :items="accordionItems">
             <template #users>
-                <Modal v-for="groupUser of group.users" :title="groupUser.name">
+                <Modal v-for="groupUser of group.users" :title="groupUser.user.name">
                     <div class="container">
-                        <template v-if="groupUser.id != user.id">
-                            <Button :href="'mailto:' + groupUser.email" :disabled="user.id == groupUser.id" class="btn btn-primary w-100">
+                        <template v-if="groupUser.user.id != user.id">
+                            <Button :href="'mailto:' + groupUser.user.email" :disabled="user.id == groupUser.user.id" class="btn btn-primary w-100">
                                 Nachricht schreiben
                             </Button>
-                            <Button v-if="user.id == group.owner_id" class="btn btn-danger w-100 mt-2" @click="kickUser(groupUser)">
-                                {{ groupUser.name }} kicken
+                            <Button v-if="user.id == group.owner_id" class="btn btn-danger w-100 mt-2" @click="kickUser(groupUser.user)">
+                                {{ groupUser.user.name }} kicken
                             </Button>
                         </template>
                     </div>
                     <template #button>
                         <div class="m-1">
-                            <Button class="btn btn-primary w-100">{{ groupUser.name }}</Button>
+                            <Button class="btn btn-primary w-100">{{ groupUser.user.name }}</Button>
                         </div>
                     </template>
                 </Modal>
                 <div class="m-1">
-                    <Button class="btn btn-primary w-100" :href="'mailto:' + [...group.users.filter(e => e.id != user.id).map(e => e.email)]">
+                    <Button
+                        class="btn btn-primary w-100"
+                        :href="'mailto:' + [...group.users.filter(e => e.user.id != user.id).map(e => e.user.email)]"
+                    >
                         Nachricht an alle
                     </Button>
                     <EmailInput placeholder="email" v-model="addForm.email">
@@ -46,7 +49,7 @@
             </template>
             <template #addTask>
                 <Modal title="Aufgabe hinzufügen" v-model="addModal">
-                    <createTask :group="group" :groupUser="group.users" :user="user" v-model="addModal"></createTask>
+                    <createTask :group="group" :groupUser="group.users.map(e => e.user)" :user="user" v-model="addModal"></createTask>
                     <template #button>
                         <div style="height: 1px"></div>
                         <div class="m-1">

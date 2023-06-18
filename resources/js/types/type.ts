@@ -5,10 +5,14 @@ export type Errors = { [key: string]: any };
 export interface Group {
   id: Id;
   name: string;
-  users: User[];
+  users: Groupuser[];
   tasks: Task[];
   owner_id: Id;
   is_public: boolean
+}
+export interface Groupuser{
+  is_admin: boolean
+  user: User
 }
 export interface User {
   id: Id;
