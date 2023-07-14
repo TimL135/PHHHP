@@ -58,6 +58,10 @@ class Group extends Model
     {
         return $this->hasMany(GroupUser::class);
     }
+    public function scopeUser(User $user)
+    {
+        return $this->users()->where("user_id", "=", $user->id)->first();
+    }
     public static function withoutUser(User $user)
     {
         return Group::whereDoesntHave("users", function (Builder $query) use ($user) {

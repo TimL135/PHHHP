@@ -12,6 +12,7 @@ export interface Group {
 }
 export interface Groupuser{
   is_admin: boolean
+  points: number
   user: User
 }
 export interface User {

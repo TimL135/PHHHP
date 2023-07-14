@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 
 class TaskController extends Controller
 {
@@ -20,6 +21,17 @@ class TaskController extends Controller
             "title" => "required|string",
             "worker_id" => "nullable|exists:users,id",
         ]);
+
+        if ($group->scopeUser(Auth::user())->is_admin) {
+            $validated = Arr::collapse([$validated, $request->validate([
+                "points" => "required|numeric",
+            ])]);
+        } else {
+            $validated = Arr::collapse([$validated, [
+                "points" => 0,
+            ]]);
+        }
+
         $task = Task::create([...$validated, "group_id" => $group->id]);
         $group->tasks()->save($task);
         return to_route("groups");
@@ -32,8 +44,19 @@ class TaskController extends Controller
             "notes" => "nullable|string",
             "repeat" => "required|numeric",
             "title" => "required|string",
-            "worker_id" => "nullable|exists:users,id",
         ]);
+
+        if ($group->scopeUser(Auth::user())->is_admin) {
+            $validated = Arr::collapse([$validated, $request->validate([
+                "points" => "required|numeric",
+            ])]);
+        }
+        if ($group->scopeUser(Auth::user())->is_admin || $task->done == 0) {
+            $validated = Arr::collapse([$validated, $request->validate([
+                "worker_id" => "nullable|exists:users,id",
+            ])]);
+        }
+
         if ($group->users(Auth::user())->exists()) {
             if ($validated["done"] == true && $validated["repeat"] > 0) {
                 // dd($task->toArray()["points"]);

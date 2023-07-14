@@ -15,7 +15,7 @@
                     </div>
                     <template #button>
                         <div class="m-1">
-                            <Button class="btn btn-primary w-100">{{ groupUser.user.name }}</Button>
+                            <Button class="btn btn-primary w-100">{{ groupUser.user.name }} ({{ groupUser.points }})</Button>
                         </div>
                     </template>
                 </Modal>
@@ -49,7 +49,7 @@
             </template>
             <template #addTask>
                 <Modal title="Aufgabe hinzufügen" v-model="addModal">
-                    <createTask :group="group" :groupUser="group.users.map(e => e.user)" :user="user" v-model="addModal"></createTask>
+                    <createTask :group="group" :groupUser="groupUser!" :user="user" v-model="addModal"></createTask>
                     <template #button>
                         <div style="height: 1px"></div>
                         <div class="m-1">
@@ -69,14 +69,7 @@
                         class="mb-1"
                     >
                         <Modal :title="task[1].title">
-                            <showTask
-                                :task="task[1]"
-                                :group="group"
-                                :groupUser="group.users"
-                                :user="user"
-                                :task-id="+task[0]"
-                                v-model="showModal"
-                            ></showTask>
+                            <showTask :task="task[1]" :group="group" :user="user" :task-id="+task[0]" v-model="showModal"></showTask>
                             <template #button>
                                 <div class="m-1">
                                     <Button class="btn btn-primary w-100">
@@ -183,11 +176,14 @@ const { group, user } = toRefs(props);
 
 const addModal = ref(false);
 const showModal = ref(false);
+const groupUser = computed(() => {
+    return group.value.users.find(e => e.user.id == user.value.id);
+});
 
 const accordionItems = computed(() => {
     const array = [];
     array.push({ title: 'Mitglieder', hash: 'users' });
-    if (group.value.owner_id == user.value.id) {
+    if (groupUser.value?.is_admin) {
         array.push({ title: 'Einstellungen', hash: 'settings' });
     }
     array.push({

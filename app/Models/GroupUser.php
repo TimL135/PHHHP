@@ -11,6 +11,7 @@ class GroupUser extends Model
 {
     use HasFactory, Notifiable;
     protected $table = "group_user";
+    protected $appends = ["points"];
     protected $with = ["user"];
     protected $hidden = ["created_at", "updated_at", "user_id", "group_id"];
 
@@ -25,5 +26,9 @@ class GroupUser extends Model
     public function getIsAdminAttribute()
     {
         return $this->attributes["is_admin"] == 1 || $this->group->owner_id == $this->id;
+    }
+    public function getPointsAttribute()
+    {
+        return $this->group->tasks()->where("worker_id", $this->id)->where("done", true)->sum("points");
     }
 }
