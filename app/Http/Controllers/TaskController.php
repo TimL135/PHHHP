@@ -35,11 +35,15 @@ class TaskController extends Controller
             "worker_id" => "nullable|exists:users,id",
         ]);
         if ($group->users(Auth::user())->exists()) {
-            if ($validated["done"] == true && $validated["repeat"] > 0)
+            if ($validated["done"] == true && $validated["repeat"] > 0) {
+                // dd($task->toArray()["points"]);
+                $oldTask = Task::create([...$task->toArray(), "done" => true]);
+                $group->tasks()->save($oldTask);
                 $validated["done"] = false;
+            }
             $task->fill($validated);
+            $task->save();
         }
-        $task->save();
         return to_route("groups");
     }
     public function deleteTask(Request $request, Task $task)

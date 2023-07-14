@@ -24,6 +24,6 @@ class GroupUser extends Model
     }
     public function getIsAdminAttribute()
     {
-        return $this->attributes["is_admin"] == 1;
+        return $this->attributes["is_admin"] == 1 || $this->group->owner_id == $this->id;
     }
 }

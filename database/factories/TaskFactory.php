@@ -25,7 +25,8 @@ class TaskFactory extends Factory
             "done" => 0,
             "group_id" => 1,
             "appointment" => Carbon::now(),
-            "repeat" => 1
+            "repeat" => 1,
+            "points" => fake()->numberBetween(1, 100)
         ];
     }
 }

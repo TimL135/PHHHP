@@ -14,6 +14,7 @@
     <RadioGroup class="mt-2 p-0 py-2" v-model="editForm.repeat" :options="repeatOptions"></RadioGroup>
     <InputError :message="editForm.errors.repeat" />
     <DateInput placeholder="nächster Termin" v-model="appointment" v-if="editForm.repeat >= 1"></DateInput>
+    <NumberInput placeholder="Punkte" v-model="editForm.points"></NumberInput>
     <TextareaInput placeholder="Notizen (optinoal)" v-model="editForm.notes"></TextareaInput>
     <InputError :message="editForm.errors.notes" />
     erstellt
@@ -37,7 +38,7 @@
 <script setup lang="ts">
 import { computed, ref, toRefs } from 'vue';
 import * as type from '../../types/type';
-import { TextInput, TextareaInput, SelectInput, Button, RadioGroup, DateInput, TimeInput, CheckboxInput } from 'custom-mbd-components';
+import { TextInput, TextareaInput, SelectInput, Button, RadioGroup, DateInput, TimeInput, CheckboxInput, NumberInput } from 'custom-mbd-components';
 import { repeatOptions, closeModal } from '../../global';
 import { useForm } from '@inertiajs/vue3';
 import InputError from '../InputError.vue';
@@ -63,6 +64,7 @@ const editForm = useForm({
     creator_id: task.value.creator_id,
     repeat: task.value.repeat,
     worker_id: task.value.worker_id,
+    points: task.value.points,
 });
 const deleteForm = useForm({
     group_id: group.value.id,
