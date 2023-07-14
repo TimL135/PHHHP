@@ -51,20 +51,21 @@ class TaskController extends Controller
                 "points" => "required|numeric",
             ])]);
         }
-        if ($group->scopeUser(Auth::user())->is_admin || $task->done == 0) {
+        if ($group->scopeUser(Auth::user())->is_admin || $task->done == 0 || $validated["done"] == 0) {
             $validated = Arr::collapse([$validated, $request->validate([
                 "worker_id" => "nullable|exists:users,id",
             ])]);
         }
 
         if ($group->users(Auth::user())->exists()) {
-            if ($validated["done"] == true && $validated["repeat"] > 0) {
-                // dd($task->toArray()["points"]);
-                $oldTask = Task::create([...$task->toArray(), "done" => true]);
-                $group->tasks()->save($oldTask);
-                $validated["done"] = false;
-            }
+            $appointment = $task->appointment;
             $task->fill($validated);
+            if ($validated["done"] == true && $validated["repeat"] > 0) {
+                $oldTask = Task::create([...$task->toArray(), "done" => true, "appointment" => $appointment]);
+                $group->tasks()->save($oldTask);
+                $task->done = false;
+            }
+
             $task->save();
         }
         return to_route("groups");
