@@ -12,3 +12,9 @@ export const repeatOptions = ref([
   { text: 'alle 14 tage', value: 14 },
   { text: 'einmal im monat', value: 31 },
 ]);
+export const importantOptions = ref([
+  { text: 'nichtig', value: 0 },
+  {text:'normal',value:1},
+  { text: 'wichtig', value: 2 },
+  { text: 'sehr wichtig', value: 3 },
+]);

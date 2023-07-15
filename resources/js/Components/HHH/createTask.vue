@@ -11,6 +11,7 @@
         ></SelectInput>
         <InputError :message="form.errors.worker_id" />
         <RadioGroup class="mt-2" v-model="form.repeat" :options="repeatOptions"></RadioGroup>
+        <RadioGroup class="mt-2" v-model="form.important" :options="importantOptions"></RadioGroup>
         <InputError :message="form.errors.repeat" />
         <DateInput placeholder="nächster Termin" v-model="form.appointment" v-if="form.repeat >= 1"></DateInput>
         <InputError :message="form.errors.appointment" />
@@ -25,7 +26,7 @@ import { ref, toRefs } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import * as type from '../../types/type';
 import { TextInput, TextareaInput, SelectInput, Button, RadioGroup, DateInput, NumberInput } from 'custom-mbd-components';
-import { repeatOptions, closeModal } from '../../global';
+import { repeatOptions, importantOptions, closeModal } from '../../global';
 import InputError from '../InputError.vue';
 
 const props = withDefaults(
@@ -44,6 +45,7 @@ const form = useForm({
     done: false,
     creator_id: user.value.id,
     repeat: 0,
+    important: 0,
     worker_id: null as type.Id | null,
     appointment: '',
     points: 0,

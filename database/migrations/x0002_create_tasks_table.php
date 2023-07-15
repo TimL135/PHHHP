@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean("done")->default(false);
             $table->string("notes")->nullable();
             $table->unsignedInteger("repeat");
+            $table->unsignedInteger("important");
             $table->unsignedInteger("points");
             $table->string("title");
             $table->foreignId('worker_id')->nullable()->constrained(table: 'users');

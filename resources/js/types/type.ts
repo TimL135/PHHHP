@@ -44,5 +44,6 @@ export interface Task {
   created_at: string;
   doneAt?: string;
   repeat: 0 | 1 | 7 | 14 | 31;
+  important: 0 | 1 | 2 | 3;
   points: number;
 }
