@@ -47,12 +47,15 @@ const props = withDefaults(
 
 const { user, groups } = toRefs(props);
 for (const group of groups.value) {
-    const channel = window.Echo.private(`newTask.${group.id}`);
+    const channel = window.Echo.private(`updateTasks.${group.id}`);
     channel
         .subscribed(() => {
             console.log('subscribed');
         })
         .listen('.newTask', e => {
+            if (e.new) group.tasks.push(e.new);
+            if (e.delete) group.tasks = group.tasks.filter(g => g.id != e.delete.id);
+            if (e.update) group.tasks = group.tasks.map(g => (g.id == e.update.id ? e.update : g));
             console.log(e);
         });
 }

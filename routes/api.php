@@ -27,7 +27,7 @@ Route::middleware('auth')->group(
                 Route::controller(TaskController::class)->group(function () {
                     Route::post("/{group}/addTask",  "addTask");
                     Route::post("/{group}/{task}/editTask",  "editTask");
-                    Route::post("/{task}/deleteTask",  "deleteTask");
+                    Route::post("/{group}/{task}/deleteTask",  "deleteTask");
                 });
             }
         );

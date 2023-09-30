@@ -35,8 +35,8 @@ class TaskController extends Controller
 
         $task = Task::create([...$validated, "group_id" => $group->id]);
         $group->tasks()->save($task);
-        event(new \App\Events\NewTask($task));
-        return to_route("groups");
+        event(new \App\Events\UpdateTasks($task, 'new'));
+        return back();
     }
     public function editTask(Request $request, Group $group, Task $task)
     {
@@ -70,10 +70,12 @@ class TaskController extends Controller
 
             $task->save();
         }
+        event(new \App\Events\UpdateTasks($task, 'update'));
         return to_route("groups");
     }
-    public function deleteTask(Request $request, Task $task)
+    public function deleteTask(Request $request, Group $group, Task $task)
     {
+        event(new \App\Events\UpdateTasks($task, 'delete'));
         $task->delete();
         return to_route("groups");
     }

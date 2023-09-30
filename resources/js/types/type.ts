@@ -35,6 +35,7 @@ export interface ShoppingList {
 
 export interface Task {
   id: Id;
+  group_id: Id;
   title: string;
   notes: string;
   done: boolean;

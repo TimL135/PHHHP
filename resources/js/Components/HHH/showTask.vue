@@ -73,7 +73,7 @@ const deleteForm = useForm({
     task_id: task.value.id,
 });
 function deleteTask() {
-    deleteForm.post(`api/${task.value.id}/deleteTask`, {
+    deleteForm.post(`api/${task.value.group_id}/${task.value.id}/deleteTask`, {
         onSuccess: () => {
             closeModal();
         },

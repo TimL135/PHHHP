@@ -13,18 +13,20 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
 
 
-class NewTask implements ShouldBroadcast
+class UpdateTasks implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     private Task $task;
+    private string $action;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Task $task)
+    public function __construct(Task $task, string $action)
     {
         $this->task = $task;
+        $this->action = $action;
     }
 
     /**
@@ -39,7 +41,7 @@ class NewTask implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('newTask.' . $this->task->group_id),
+            new PrivateChannel('updateTasks.' . $this->task->group_id),
         ];
     }
     public function broadcastAs()
@@ -48,6 +50,6 @@ class NewTask implements ShouldBroadcast
     }
     public function broadcastWith()
     {
-        return ["task" => $this->task];
+        return [$this->action => $this->task];
     }
 }
