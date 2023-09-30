@@ -20,6 +20,7 @@ class TaskController extends Controller
             "repeat" => "required|numeric",
             "title" => "required|string",
             "worker_id" => "nullable|exists:users,id",
+            "important" => "required|Integer"
         ]);
 
         if ($group->scopeUser(Auth::user())->is_admin) {
@@ -34,6 +35,7 @@ class TaskController extends Controller
 
         $task = Task::create([...$validated, "group_id" => $group->id]);
         $group->tasks()->save($task);
+        event(new \App\Events\NewTask($task));
         return to_route("groups");
     }
     public function editTask(Request $request, Group $group, Task $task)

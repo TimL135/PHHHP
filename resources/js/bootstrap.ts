@@ -31,8 +31,3 @@ window.Echo = new Echo({
     encrypted:false,
     enabledTransports: ['ws', 'wss'],
 });
-const channel = window.Echo.channel('public.playground');
-channel.subscribed(()=>{console.log('subscribed')})
-.listen(".playground", (e) => {
-    console.log(e);
-});

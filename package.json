@@ -4,7 +4,9 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "reset": "php artisan migrate:fresh --seed"
+        "reset": "php artisan migrate:fresh --seed",
+        "backend": "php artisan serve",
+        "websocket": "php artisan websockets:serve"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^1.0.0",

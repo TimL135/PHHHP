@@ -25,7 +25,8 @@ class Task extends Model
         'title',
         'worker_id',
         'group_id',
-        "points"
+        "points",
+        "important"
     ];
 
     /**

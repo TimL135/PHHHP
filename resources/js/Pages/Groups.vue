@@ -46,6 +46,16 @@ const props = withDefaults(
 );
 
 const { user, groups } = toRefs(props);
+for (const group of groups.value) {
+    const channel = window.Echo.private(`newTask.${group.id}`);
+    channel
+        .subscribed(() => {
+            console.log('subscribed');
+        })
+        .listen('.newTask', e => {
+            console.log(e);
+        });
+}
 
 const view = ref('');
 
